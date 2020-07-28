@@ -25,13 +25,30 @@ def translate(w):
                 meaning += ""
             return meaning
 
+    # If there is a close match
+    elif len(get_close_matches(w,data.keys())) > 0:
+        
+        # Getting the top 3 matches
+        matches = get_close_matches(w,data.keys(),cutoff = 0.8)
+        yn = input("Did you mean " + matches[0] + "? (Y/N): ")
+        if yn == "y" or yn == "Y":
+            # Returning the meaning of the first match
+            string = data[matches[0]]
+            for lettr in string:
+                if lettr != "[" or lettr != "]":
+                    meaning += lettr
+                else:
+                    meaning += ""
+            return meaning
+        elif yn == "n" or yn == "N":
+            return "The word does not exist. Please double check or enter a different word."
+        else:
+            return "Invalid Input!"
+            
     # If all the above conditions are false then the word does not exist
     else:
-        print("Word does not exist!")
-        # Getting the top 3 close matches
-        matches = get_close_matches(w,data.keys(),cutoff = 0.8)
-        return matches
-
+        return "Word does not exist!"
+            
 # Empty string for input
 word = ""
 
@@ -39,7 +56,4 @@ word = ""
 while word != "/end":
     word = input("Enter word: ")
     meaning = translate(word)
-    if type(meaning) == str:
-        print(meaning + "\n")
-    else:
-        print("Did you mean " + meaning[0] + "?")
+    print(meaning)
