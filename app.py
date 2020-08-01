@@ -7,7 +7,6 @@ data = json.load(open("data.json"))
 
 # Function to find the word and it's meaning from the JSON file
 def translate(w):
-    meaning = ""
     w = w.lower()
     
     # Condition to check if the string is empty
@@ -16,32 +15,21 @@ def translate(w):
     
     # Condition to check if the word exists in the variable data
     elif w in data:
-        print("Word exists!")
-        string = data[w]
-        for lettr in string:
-            if lettr != "[" or lettr != "]":
-                meaning += lettr
-            else:
-                meaning += ""
-            return meaning
+        return data[w]
+
+    # For proper nouns such as names of Cities or Countries (Paris, Seattle etc.)
+    elif w.title() in data:
+        return data[w.title()]
 
     # If there is a close match
     elif len(get_close_matches(w,data.keys())) > 0:
-        
         # Getting the top 3 matches
         matches = get_close_matches(w,data.keys(),cutoff = 0.8)
         yn = input("Did you mean " + matches[0] + "? (Y/N): ")
         if yn == "y" or yn == "Y":
-            # Returning the meaning of the first match
-            string = data[matches[0]]
-            for lettr in string:
-                if lettr != "[" or lettr != "]":
-                    meaning += lettr
-                else:
-                    meaning += ""
-            return meaning
+            return data[matches[0]]
         elif yn == "n" or yn == "N":
-            return "The word does not exist. Please double check or enter a different word."
+            return "The word may not exist. Please double check or enter a different word."
         else:
             return "Invalid Input!"
             
@@ -53,7 +41,16 @@ def translate(w):
 word = ""
 
 # Loop to ask for a user input word
-while word != "/end":
-    word = input("Enter word: ")
-    meaning = translate(word)
+# while word != "/end":
+#     word = input("Enter word: ")
+#     meaning = translate(word)
+#     print(meaning)
+
+word = input("Enter word: ")
+meaning = translate(word)
+if type(meaning) == str:
     print(meaning)
+
+elif type(meaning) == list:
+    for item in meaning:
+        print(item)
