@@ -17,9 +17,13 @@ def translate(w):
     elif w in data:
         return data[w]
 
-    # For proper nouns such as names of Cities or Countries (Paris, Seattle etc.)
+    # Condition to check for proper nouns such as names of Cities or Countries (Paris, Seattle etc.)
     elif w.title() in data:
         return data[w.title()]
+
+    # Condition to check for acronyms such as USA, NATO etc.
+    elif w.upper() in data:
+        return data[w.upper()]
 
     # If there is a close match
     elif len(get_close_matches(w,data.keys())) > 0:
